@@ -1,11 +1,51 @@
-name: A workflow for my Hello World file
-on: push
+name: CI
+on:
+  push:
+    branches:
+      - mz/testingAction
+  pull_request:
+    branches:
+      - master
+      - mz/testingAction    
+
 jobs:
-  build:
-    name: Hello world action
+  UI_Checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: ./action-a
+      ########################
+      ## SETUP ENV and DEPENDS
+      ########################
+      - uses: actions/checkout@v2
         with:
-          MY_NAME: "Mona"
+          fetch-depth: 0
+      - name: Check UI 
+        id: UI_GIT_DIFF
+        run: |
+          echo $GITHUB_EVENT_NAME
+          if [[ $GITHUB_EVENT_NAME = "pull_request" ]]
+          then
+            echo "::set-output name=directories::$(git diff-tree --no-commit-id  --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref }} |  grep -x ui)" 
+          fi
+          if [[ $GITHUB_EVENT_NAME = "push" ]]
+          then
+            echo "::set-output name=directories::$(git diff-tree --no-commit-id  --name-only HEAD |  grep -x ui)" 
+          fi
+      - name: Print Output
+        run: |
+          echo ${{ steps.UI_GIT_DIFF.outputs.directories }}
+          echo "github.ref" + ${{ github.ref	}}
+          echo "github.head_ref" + ${{ github.head_ref }}
+          echo "github.base_ref" + ${{ github.base_ref }}
+          echo "gitub action" + $GITHUB_EVENT_NAME
+          echo "the variable" + $UI_GIT_ACTION
+      - name: Check UI Change
+        if: contains( steps.UI_GIT_DIFF.outputs.directories, 'ui') 
+        run: | 
+          echo "UI Change"
+      - name: Check API Change
+        if: contains( steps.UI_GIT_DIFF.outputs.directories, 'api') 
+        run: | 
+          echo "API Change"
+
+# git diff-tree --no-commit-id  --name-only origin/master origin/mz/testingAction |  grep -x ui
+# git diff-tree --no-commit-id  --name-only origin/master  refs/heads/mz/testingAction |  grep -x ui

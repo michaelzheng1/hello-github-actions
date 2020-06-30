@@ -1,0 +1,23 @@
+API content.
+
+echo "::set-output name=directories::$(git diff-tree --no-commit-id  --name-only HEAD |  grep -x ui)"
+          if [[$GITHUB_EVENT_NAME = "pull_request"]]
+          then
+            echo "::set-output name=directories::$(git diff-tree --no-commit-id  --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref	}} |  grep -x ui)"
+          fi
+
+          if [[ $GITHUB_EVENT_NAME = "push" ]]
+          then
+             echo "::set-output name=directories::$(git diff-tree --no-commit-id  --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref	}} |  grep -x ui)"
+          else
+            echo "::set-output name=directories::$(git diff-tree --no-commit-id  --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref	}} |  grep -x ui)"
+          fi
+
+          if [[ $GITHUB_EVENT_NAME = 'push']]
+          then
+            echo 'push'
+          fi
+          if [[ $GITHUB_EVENT_NAME = 'pull_request']]
+          then
+            echo 'pull_request'
+          fi
