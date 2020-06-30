@@ -1,0 +1,42 @@
+name: CHRON_ADUIT
+on: 
+  schedule:
+    - cron: '18 14 * * 1-5'
+
+jobs:
+  UI_NPM_AUDIT:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: mz/testingAction
+      - name: UI NPM Audit
+        run: |
+          cd ui
+          npm audit --audit-level=moderate
+      - name: UI Success
+        if: success()
+        run: | 
+          echo "success"
+      - name: UI Fail
+        if: failure()
+        run: |
+          echo "failure"
+  API_NPM_AUDIT:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: mz/testingAction
+      - name: API NPM Audit
+        run: |
+          cd api
+          npm audit --audit-level=moderate
+      - name: API Success
+        if: success()
+        run: | 
+          echo "API success"
+      - name: API Fail
+        if: failure()
+        run: |
+          echo "API failure"
