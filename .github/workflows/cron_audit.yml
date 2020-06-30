@@ -1,9 +1,7 @@
 name: CHRON_ADUIT
 on: 
   schedule:
-    - cron: '*/2 * * * *'
-    # - cron: '41 13 * * 1-5'
-
+    - cron: '22 14 * * 1-5'
 jobs:
   UI_NPM_AUDIT:
     runs-on: ubuntu-latest
