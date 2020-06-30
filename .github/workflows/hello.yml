@@ -1,0 +1,13 @@
+name: CHRON_HELLO
+on: 
+  schedule:
+    - cron: '*/2 * * * *'
+jobs:
+  UI_NPM_AUDIT:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: HELLO
+        run: |
+          echo "Hello"
+
