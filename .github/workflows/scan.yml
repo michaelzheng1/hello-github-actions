@@ -1,0 +1,59 @@
+name: Scan Audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      dev:
+        description: Audit the dev environment [true/false]
+        default: false
+        required: true
+      test:
+        description: Audit the test environment [true/false]
+        default: false
+        required: true
+
+on:
+  repository_dispatch:
+    types: scan-audit
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Output
+        env:
+          dev: true
+          test: false
+        run: |
+          echo " the dev env =  ${{ github.event.client_payload.dev}}"
+          echo " the test env = ${{ github.event.client_payload.test}}"
+          echo " the  dev env should be  ${dev}"
+          echo " the test env should be ${test}"
+
+
+# # on:
+# #   workflow_dispatch:
+# #     inputs:
+# #       dev:
+# #         description: Audit the dev environment [true/false]
+# #         default: false
+# #         required: true
+# #       test:
+# #         description: Audit the test environment [true/false]
+# #         default: false
+# #         required: true
+
+# on: [push]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: "Output the variables"
+#         env:
+#           dev: ${{ github.event.client_payload.dev }}
+#           # test: ${{ github.event.client_payload.test }}
+#         run: |
+#             echo "just print some output ${{ dev }}"

@@ -1,0 +1,30 @@
+---
+  - name: Perform scan for dev
+    shell: |
+      echo "dev output"
+    ignore_errors: yes
+    register: dev_output
+    when:  dev|bool
+
+  - name: Copy the output to dev.log
+    copy:
+      content: "{{ dev_output.stdout }}"
+      dest: /var/log/dev.log
+      follow: yes
+    become: true
+    when:  dev|bool
+
+  - name: Perform scan for test
+    shell: |
+      echo "test output"
+    ignore_errors: yes
+    register: test_output
+    when:  test|bool
+
+  - name: Copy the output to test.log
+    copy:
+      content: "{{ test_output.stdout }}"
+      dest: /var/log/test.log
+      follow: yes
+    become: true
+    when:  test|bool
