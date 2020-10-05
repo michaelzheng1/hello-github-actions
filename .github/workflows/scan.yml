@@ -12,9 +12,9 @@ on:
         default: false
         required: true
 
-# on:
-#   repository_dispatch:
-#     types: scan-audit
+on:
+  repository_dispatch:
+    types: scan-audit
 
 jobs:
   build:
